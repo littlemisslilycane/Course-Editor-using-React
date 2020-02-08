@@ -25,7 +25,7 @@ class CourseManagerComponent extends React.Component {
     });
   };
 
-  deleteCourse = async deletedCourse=> {
+  deleteCourse = async deletedCourse => {
     const status = await deleteCourse(deletedCourse._id);
     const courses = await findAllCourses();
     this.setState({
@@ -58,70 +58,73 @@ class CourseManagerComponent extends React.Component {
     });
 
   addCourse = async () => {
-    if(this.state.newCourseTitle.trim() == ""){
-    alert("Please enter the course title");
-    return false;
+    if (this.state.newCourseTitle.trim() == "") {
+      alert("Please enter the course title");
+      return false;
     }
     const newCourse = {
       title: this.state.newCourseTitle,
-      date: (new Date()).toLocaleString()
+      date: new Date().toLocaleString()
     };
     const actualCourse = await createCourse(newCourse);
 
     const allCourses = await findAllCourses();
     this.setState({
-          newCourseTitle: ''
-
-        });
+      newCourseTitle: ""
+    });
     this.setState({
       courses: allCourses
     });
   };
 
-  updateForm = (e) =>{
+  updateForm = e => {
     this.setState({
       newCourseTitle: e.target.value
-
     });
     this.setState({
-                      course: {
-                        ...this.state.course,
-
-                      }
-                  })
-    }
+      course: {
+        ...this.state.course
+      }
+    });
+  };
 
   render() {
     return (
-    <div>
-        {    this.state.editingCourse
-                        && <CourseEditorContainer hideCourseEditor={this.hideCourseEditor}/>
-                    }
-       {!this.state.editingCourse && <div className="wbdv-coursemanager">
-         <CourseManagerHeadingComponent updateForm = {this.updateForm}
-          addCourse = {this.addCourse}
-          newCourseTitle = {this.state.newCourseTitle}/>
-        {!this.state.editingCourse && (
-             <div className="wbdv-toggled">
-            {this.state.layout === "table" && (
-              <CourseTableContainer
-                showCourseEditor={this.showCourseEditor}
-                deleteCourse={this.deleteCourse}
-                courses={this.state.courses}
-                toggle = {this.toggle} />
-            )}
-            {this.state.layout === "grid" && (
-              <CourseGridContainer courses={this.state.courses}
-              deleteCourse={this.deleteCourse}
-              showCourseEditor={this.showCourseEditor}
-                              courses={this.state.courses}
-                              toggle = {this.toggle}
-               toggle = {this.toggle} />
-            )}
-	   </div>
+      <div>
+        {this.state.editingCourse && (
+          <CourseEditorContainer hideCourseEditor={this.hideCourseEditor} />
         )}
-      </div>
-      }
+        {!this.state.editingCourse && (
+          <div className="wbdv-coursemanager">
+            <CourseManagerHeadingComponent
+              updateForm={this.updateForm}
+              addCourse={this.addCourse}
+              newCourseTitle={this.state.newCourseTitle}
+            />
+            {!this.state.editingCourse && (
+              <div className="wbdv-toggled">
+                {this.state.layout === "table" && (
+                  <CourseTableContainer
+                    showCourseEditor={this.showCourseEditor}
+                    deleteCourse={this.deleteCourse}
+                    courses={this.state.courses}
+                    toggle={this.toggle}
+                  />
+                )}
+                {this.state.layout === "grid" && (
+                  <CourseGridContainer
+                    courses={this.state.courses}
+                    deleteCourse={this.deleteCourse}
+                    showCourseEditor={this.showCourseEditor}
+                    courses={this.state.courses}
+                    toggle={this.toggle}
+                    toggle={this.toggle}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   }
